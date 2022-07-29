@@ -1,13 +1,24 @@
+from django.db.models import Sum
 from django.shortcuts import render
 from django.views import View
+
+from charity_app.models import Donation
 
 
 class LandingPageView(View):
     """This function display application main page."""
     def get(self, request):
+        bags_quantity = Donation.objects.aggregate(Sum('quantity'))
+        bags_counter = bags_quantity['quantity__sum']
+        institutions = Donation.objects.aggregate(Sum('institution'))
+        institution_counter = institutions['institution__sum']
         return render(
             request,
-            'index.html'
+            'index.html',
+            context={
+                'bags_counter': bags_counter,
+                'institution_counter': institution_counter,
+            }
         )
 
 
