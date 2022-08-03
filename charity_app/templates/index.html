@@ -107,29 +107,52 @@
         <ul class="help--slides-items">
           <li>
             <div class="col">
-              <div class="title">Fundacja "Dbam o Zdrowie"</div>
-              <div class="subtitle">Cel i misja: Pomoc dzieciom z ubogich rodzin.</div>
+              <div class="title">{{ random_foundations.0.name }}</div>
+              <div class="subtitle">Cel i misja: {{ random_foundations.0.description }}</div>
             </div>
 
-            <div class="col"><div class="text">ubrania, jedzenie, sprzęt AGD, meble, zabawki</div></div>
+            <div class="col"><div class="text">
+                {% for category in random_foundations.0.categories.all %}
+                    {% if not forloop.last %}
+                        {{ category }},
+                    {% else %}
+                        {{ category }}
+                    {% endif %}
+                {% endfor %}</div>
+            </div>
           </li>
 
           <li>
             <div class="col">
-              <div class="title">Fundacja “Dla dzieci"</div>
-              <div class="subtitle">Cel i misja: Pomoc osobom znajdującym się w trudnej sytuacji życiowej.</div>
+              <div class="title">{{ random_foundations.1.name }}</div>
+              <div class="subtitle">Cel i misja: {{ random_foundations.1.description }}</div>
             </div>
 
-            <div class="col"><div class="text">ubrania, meble, zabawki</div></div>
-          </li>
+            <div class="col"><div class="text">
+                {% for category in random_foundations.1.categories.all %}
+                    {% if not forloop.last %}
+                        {{ category }},
+                    {% else %}
+                        {{ category }}
+                    {% endif %}
+                {% endfor %}</div>
+            </div>
 
           <li>
             <div class="col">
-              <div class="title">Fundacja “Bez domu”</div>
-              <div class="subtitle">Cel i misja: Pomoc dla osób nie posiadających miejsca zamieszkania</div>
+              <div class="title">{{ random_foundations.2.name }}</div>
+              <div class="subtitle">Cel i misja: {{ random_foundations.1.description }}</div>
             </div>
 
-            <div class="col"><div class="text">ubrania, jedzenie, ciepłe koce</div></div>
+            <div class="col"><div class="text">
+                {% for category in random_foundations.2.categories.all %}
+                    {% if not forloop.last %}
+                        {{ category }},
+                    {% else %}
+                        {{ category }}
+                    {% endif %}
+                {% endfor %}</div>
+            </div>
           </li>
         </ul>
         <!-- Pagination
@@ -151,38 +174,70 @@
         <ul class="help--slides-items">
           <li>
             <div class="col">
-              <div class="title">Organizacja 1</div>
-              <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
+              <div class="title">{{ random_non_gov_org.0.name }}</div>
+              <div class="subtitle">{{ random_non_gov_org.0.description }}</div>
             </div>
 
-            <div class="col"><div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div></div>
+            <div class="col"><div class="text">
+                {% for category in random_non_gov_org.0.categories.all %}
+                    {% if not forloop.last %}
+                        {{ category }},
+                    {% else %}
+                        {{ category }}
+                    {% endif %}
+                {% endfor %}</div>
+            </div>
           </li>
 
           <li>
             <div class="col">
-              <div class="title">Organizacja 2</div>
-              <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
+              <div class="title">{{ random_non_gov_org.1.name }}</div>
+              <div class="subtitle">{{ random_non_gov_org.1.description }}</div>
             </div>
 
-            <div class="col"><div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div></div>
+            <div class="col"><div class="text">
+                {% for category in random_non_gov_org.1.categories.all %}
+                    {% if not forloop.last %}
+                        {{ category }},
+                    {% else %}
+                        {{ category }}
+                    {% endif %}
+                {% endfor %}</div>
+            </div>
           </li>
 
           <li>
             <div class="col">
-              <div class="title">Organizacja 3</div>
-              <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
+              <div class="title">{{ random_non_gov_org.2.name }}</div>
+              <div class="subtitle">{{ random_non_gov_org.2.description }}</div>
             </div>
 
-            <div class="col"><div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div></div>
+            <div class="col"><div class="text">
+                {% for category in random_non_gov_org.2.categories.all %}
+                    {% if not forloop.last %}
+                        {{ category }},
+                    {% else %}
+                        {{ category }}
+                    {% endif %}
+                {% endfor %}</div>
+            </div>
           </li>
 
           <li>
             <div class="col">
-              <div class="title">Organizacja 4</div>
-              <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
+              <div class="title">{{ random_non_gov_org.3.name }}</div>
+              <div class="subtitle">{{ random_non_gov_org.3.description }}</div>
             </div>
 
-            <div class="col"><div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div></div>
+            <div class="col"><div class="text">
+                {% for category in random_non_gov_org.3.categories.all %}
+                    {% if not forloop.last %}
+                        {{ category }},
+                    {% else %}
+                        {{ category }}
+                    {% endif %}
+                {% endfor %}</div>
+            </div>
           </li>
         </ul>
 
@@ -203,20 +258,36 @@
         <ul class="help--slides-items">
           <li>
             <div class="col">
-              <div class="title">Lokalna zbiórka 1</div>
-              <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
+              <div class="title">{{ random_fundraisers.0.name }}</div>
+              <div class="subtitle">{{ random_fundraisers.0.description }}</div>
             </div>
 
-            <div class="col"><div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div></div>
+            <div class="col"><div class="text">
+                {% for category in random_fundraisers.0.categories.all %}
+                    {% if not forloop.last %}
+                        {{ category }},
+                    {% else %}
+                        {{ category }}
+                    {% endif %}
+                {% endfor %}</div>
+            </div>
           </li>
 
           <li>
             <div class="col">
-              <div class="title">Lokalna zbiórka 2</div>
-              <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
+              <div class="title">{{ random_fundraisers.1.name }}</div>
+              <div class="subtitle">{{ random_fundraisers.1.description }}</div>
             </div>
 
-            <div class="col"><div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div></div>
+            <div class="col"><div class="text">
+                {% for category in random_fundraisers.1.categories.all %}
+                    {% if not forloop.last %}
+                        {{ category }},
+                    {% else %}
+                        {{ category }}
+                    {% endif %}
+                {% endfor %}</div>
+            </div>
           </li>
         </ul>
 
