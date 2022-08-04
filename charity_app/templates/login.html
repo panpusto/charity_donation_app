@@ -28,7 +28,13 @@
 
     <section class="login-page">
       <h2>Zaloguj się</h2>
-      <form>
+        {% if message %}
+            <div class="validation">
+                <span>{{ message }}</span>
+            </div>
+        {% endif %}
+      <form method="post">
+          {% csrf_token %}
         <div class="form-group">
           <input type="email" name="email" placeholder="Email" />
         </div>

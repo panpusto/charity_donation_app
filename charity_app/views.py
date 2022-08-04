@@ -1,5 +1,6 @@
 import random
 
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.shortcuts import render, redirect
@@ -47,15 +48,6 @@ class AddDonationView(View):
         )
 
 
-class LoginView(View):
-    """This function display login form."""
-    def get(self, request):
-        return render(
-            request,
-            'login.html'
-        )
-
-
 class UserRegisterView(View):
     """This function display form to register new user."""
     def get(self, request):
@@ -65,6 +57,10 @@ class UserRegisterView(View):
         )
 
     def post(self, request):
+        """
+        This function validate input data and create new user account if input data is valid,
+        if not it display a message.
+        """
         name = request.POST['name']
         surname = request.POST['surname']
         email = request.POST['email']
@@ -110,11 +106,13 @@ class UserRegisterView(View):
                                  not any(char in special_symbols for char in password)):
             message = "Hasło powinno składać się przynajmniej z 8 znaków," \
                       "jednej wielkiej litery, jednej małej litery oraz jednego ze znaków !, @, #, %"
-            return render(request,
-                          'register.html',
-                          context={
-                              'message': message,
-                          })
+            return render(
+                request,
+                'register.html',
+                context={
+                    'message': message,
+                }
+            )
 
         User.objects.create_user(username=email,
                                  first_name=name,
@@ -123,3 +121,55 @@ class UserRegisterView(View):
                                  password=password)
 
         return redirect('/login')
+
+
+class LoginView(View):
+    """This function display login form."""
+    def get(self, request):
+        return render(
+            request,
+            'login.html'
+        )
+
+    def post(self, request):
+        """
+        This function log in authenticated user if username and password
+        are correct.
+        """
+        email = request.POST['email']
+        password = request.POST['password']
+
+        user = authenticate(username=email, password=password)
+
+        if user:
+            login(request, user)
+            return redirect('/')
+
+        if User.objects.filter(email=email).exists():
+            message = "Wpisałeś niepoprawne hasło. Spróbuj ponownie lub zresetuj hasło."
+            return render(
+                request,
+                'login.html',
+                context={
+                    'message': message
+                }
+            )
+
+        else:
+            message = 'Użytkownika nie ma w bazie. Proszę załóż konto.'
+            return render(
+                request,
+                'register.html',
+                context={
+                    'message': message
+                }
+            )
+
+
+class LogoutView(View):
+    """This function log out a user"""
+    def get(self, request):
+        if request.user.is_authenticated:
+            logout(request)
+
+        return redirect('/')
