@@ -1,6 +1,8 @@
 import random
+
+from django.contrib.auth.models import User
 from django.db.models import Sum
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 
 from charity_app.models import Donation, Institution
@@ -54,11 +56,70 @@ class LoginView(View):
         )
 
 
-class RegisterView(View):
-    """This function display register form for new user."""
+class UserRegisterView(View):
+    """This function display form to register new user."""
     def get(self, request):
         return render(
             request,
-            'register.html'
+            'register.html',
         )
 
+    def post(self, request):
+        name = request.POST['name']
+        surname = request.POST['surname']
+        email = request.POST['email']
+        password = request.POST['password']
+        password2 = request.POST['password2']
+
+        if password != password2:
+            message = "Hasła nie są identyczne. Proszę wpisz je jeszcze raz."
+            return render(request,
+                          'register.html',
+                          context={
+                              'message': message,
+                          })
+
+        if name == '' or surname == '' or email == '' or password == '' or password2 == '':
+            message = "Pole nie może być puste. Proszę uzupełnij wszystkie dane."
+            return render(request,
+                          'register.html',
+                          context={
+                              'message': message,
+                          })
+
+        if '@' not in email:
+            message = "Adres email jest niepoprawny. Wpisz poprawny adres email."
+            return render(request,
+                          'register.html',
+                          context={
+                              'message': message,
+                          })
+
+        if User.objects.filter(email=email).exists():
+            message = "Konto o tym adresie email już istnieje. Przejdź do strony logowania."
+            return render(request,
+                          'register.html',
+                          context={
+                              'message': message,
+                          })
+
+        special_symbols = ['!', '@', '#', '%']
+        if len(password) < 8 or (not any(char.isdigit() for char in password) or
+                                 not any(char.isupper() for char in password) or
+                                 not any(char.islower() for char in password) or
+                                 not any(char in special_symbols for char in password)):
+            message = "Hasło powinno składać się przynajmniej z 8 znaków," \
+                      "jednej wielkiej litery, jednej małej litery oraz jednego ze znaków !, @, #, %"
+            return render(request,
+                          'register.html',
+                          context={
+                              'message': message,
+                          })
+
+        User.objects.create_user(username=email,
+                                 first_name=name,
+                                 last_name=surname,
+                                 email=email,
+                                 password=password)
+
+        return redirect('/login')
