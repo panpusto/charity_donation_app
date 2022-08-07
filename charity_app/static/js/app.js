@@ -253,3 +253,51 @@ document.addEventListener("DOMContentLoaded", function() {
     new FormSteps(form);
   }
 });
+
+
+const categoriesInputs = document.querySelectorAll('#categories');
+const institutions = document.querySelectorAll('#institution');
+const btnChosenCat = document.getElementById('chosen-categories');
+const divInstitutions = document.querySelectorAll('#institution-label');
+btnChosenCat.addEventListener("click", e => {
+  divInstitutions.forEach(function (div) {
+    div.removeAttribute('style');
+  });
+  let category_checked = [];
+  categoriesInputs.forEach(function (category) {
+    if (category.checked) {
+      category_checked.push(category.value);
+    }
+console.log(category_checked)
+  });
+  institutions.forEach(function(i) {
+    const institutionCategories = i.querySelectorAll('#cat');
+    const instCatArr = [];
+    institutionCategories.forEach(function (j) {
+      instCatArr.push(j.value)
+    })
+    console.log(instCatArr)
+    if (category_checked.every(elem => instCatArr.includes(elem)) === false) {
+      i.style.display = 'none';
+    }
+  });
+})
+
+const btn = document.getElementById('donation-confirmation');
+btn.addEventListener('click', e => {
+  document.getElementById("summary-quantity").textContent = document.getElementById('id_quantity').value;
+  document.querySelectorAll(".form-section--column ul li")[0].textContent = document.getElementById('id_address').value;
+  document.querySelectorAll(".form-section--column ul li")[1].textContent = document.getElementById('id_city').value;
+  document.querySelectorAll(".form-section--column ul li")[2].textContent = document.getElementById('id_zip_code').value;
+  document.querySelectorAll(".form-section--column ul li")[3].textContent = document.getElementById('id_phone_number').value;
+  document.querySelectorAll(".form-section--column ul li")[4].textContent = document.getElementById('id_pick_up_date').value;
+  document.querySelectorAll(".form-section--column ul li")[5].textContent = document.getElementById('id_pick_up_time').value;
+  document.querySelectorAll(".form-section--column ul li")[6].textContent = document.getElementById('id_pick_up_comment').value;
+  const institutionInputs = document.getElementsByName('institution')
+  institutionInputs.forEach(function (i) {
+    if (i.checked) {
+      const institution = i.parentElement.children[2].firstElementChild.innerHTML;
+      document.getElementById("summary-institution").textContent = "Dla fundacji " + '"' + institution + '"';
+    }
+  })
+})

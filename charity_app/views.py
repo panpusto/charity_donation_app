@@ -1,12 +1,14 @@
 import random
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.shortcuts import render, redirect
 from django.views import View
 
-from charity_app.models import Donation, Institution
+from charity_app.forms import AddDonationForm
+from charity_app.models import Donation, Institution, Category
 
 
 class LandingPageView(View):
@@ -39,13 +41,29 @@ class LandingPageView(View):
         )
 
 
-class AddDonationView(View):
+class AddDonationView(LoginRequiredMixin, View):
+    login_url = 'login'
     """This function display form to add donation"""
     def get(self, request):
+        form = AddDonationForm()
+        categories = Category.objects.all()
+        institutions = Institution.objects.all()
         return render(
             request,
-            'form.html'
+            'form.html',
+            context={
+                'form': form,
+                'categories': categories,
+                'institutions': institutions,
+            }
         )
+
+    def post(self, request):
+        """This function save donation data to database."""
+        form = AddDonationForm(request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
 
 
 class UserRegisterView(View):

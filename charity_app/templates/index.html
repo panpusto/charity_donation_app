@@ -13,7 +13,7 @@
                 <ul class="dropdown">
                   <li><a href="#">Profil</a></li>
                   <li><a href="#">Ustawienia</a></li>
-                  <li><a href="#">Wyloguj</a></li>
+                  <li><a href="{% url 'logout' %}">Wyloguj</a></li>
                 </ul>
               </li>
             </ul>
@@ -121,7 +121,7 @@
           <li>
             <div class="col">
               <div class="title">{{ random_foundations.0.name }}</div>
-              <div class="subtitle">Cel i misja: {{ random_foundations.0.description }}</div>
+              <div class="subtitle">{{ random_foundations.0.description }}</div>
             </div>
 
             <div class="col"><div class="text">
@@ -154,7 +154,7 @@
           <li>
             <div class="col">
               <div class="title">{{ random_foundations.2.name }}</div>
-              <div class="subtitle">Cel i misja: {{ random_foundations.1.description }}</div>
+              <div class="subtitle">{{ random_foundations.1.description }}</div>
             </div>
 
             <div class="col"><div class="text">
