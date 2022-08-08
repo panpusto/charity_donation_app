@@ -12,6 +12,9 @@
                 <ul class="dropdown">
                   <li><a href="#">Profil</a></li>
                   <li><a href="#">Ustawienia</a></li>
+                    {% if user.is_authenticated and user.is_superuser %}
+                    <li><a href="/admin/">Panel administracyjny</a></li>
+                    {% endif %}
                   <li><a href="{% url 'logout' %}">Wyloguj</a></li>
                 </ul>
               </li>
@@ -213,10 +216,10 @@
           <!-- STEP 6 -->
           <div data-step="5">
             <h3>Podsumowanie Twojej darowizny</h3>
-
             <div class="summary">
               <div class="form-section">
                 <h4>Oddajesz:</h4>
+
                 <ul>
                   <li>
                     <span class="icon icon-bag"></span>

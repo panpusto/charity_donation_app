@@ -56,7 +56,7 @@ class AddDonationView(LoginRequiredMixin, View):
             }
         )
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         """This function save donation data to database."""
         institution = request.POST['institution']
         categories = request.POST.getlist('categories')

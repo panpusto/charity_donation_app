@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function() {
      *
      * TODO: validation, send data to server
      */
-    submit(e) {
+    submit() {
       this.currentStep++;
       this.updateForm();
     }
@@ -303,5 +303,28 @@ console.log(category_checked)
   });
 })
 
-// Form validation
-const
+// // Form validation
+// const quantity = document.getElementById('bags');
+// const category = document.getElementById('category');
+// const organization = document.getElementById('institution');
+// const address = document.getElementById('address');
+// const phoneNumber = document.getElementById('phone_number');
+// const city = document.getElementById('city');
+// const zipCode = document.getElementById('zip_code');
+// const pickUpDate = document.getElementById('pick_up_date');
+// const pickUpTime = document.getElementById('pick_up_time');
+// const pickUpComment = document.getElementById('pick_up_comment');
+// const donationForm = document.getElementById('donation-form');
+// const errorMessages = document.getElementById('error');
+//
+// donationForm.addEventListener('submit', (e) => {
+//   let messages = [];
+//   if (category.value == null) {
+//     messages.push("Musisz wybrać co najmniej jedną kategorię.")
+//   }
+//   if (quantity.value === '' || quantity.value == null) {
+//     messages.push("Musisz wpisać ile worków chcesz przekazać.")
+//   }
+//   errorMessages.innerText = messages.join(', ');
+//   e.preventDefault();
+// })

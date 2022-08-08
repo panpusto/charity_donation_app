@@ -18,7 +18,7 @@ from django.urls import path
 from charity_app import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin-site'),
     path('', views.LandingPageView.as_view(), name='landing-page'),
     path('add-donation/', views.AddDonationView.as_view(), name='add-donation'),
     path('login/', views.LoginView.as_view(), name='login'),
