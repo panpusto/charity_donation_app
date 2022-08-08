@@ -86,7 +86,7 @@
       <div class="form--steps-container">
         <div class="form--steps-counter">Krok <span>1</span>/5</div>
 
-        <form method="post">
+        <form id="donation-form" method="post">
         {% csrf_token %}
           <!-- STEP 1: class .active is switching steps -->
           <div data-step="1" class="active">
@@ -98,8 +98,8 @@
                 <input
                   type="checkbox"
                   name="categories"
-                  value="{{ category.pk }}"
-                  id="categories"
+                  value="{{ category.id }}"
+                  id="category"
                 />
                 <span class="checkbox"></span>
                 <span class="description">{{ category.name }}</span>
@@ -118,7 +118,7 @@
             <div class="form-group form-group--inline">
               <label>
                 Liczba 60l worków:
-                  {{ form.quantity }}
+                <input type="number" name="bags" step="1" min="1" id="bags" />
               </label>
             </div>
 
@@ -138,7 +138,7 @@
             <div class="form-group form-group--checkbox" id="institution">
               <label>
                 <input type="radio" name="institution" id="institution-label"
-                                value=""/>
+                                value="{{ institution.id }}"/>
                 <span class="checkbox radio"></span>
                 <span class="description">
                   <div class="title">{{ institution.name }}</div>
@@ -166,22 +166,22 @@
               <div class="form-section--column">
                 <h4>Adres odbioru</h4>
                 <div class="form-group form-group--inline">
-                  <label> Ulica {{ form.address }} </label>
+                  <label> Ulica <input type="text" name="address" id="address"/> </label>
                 </div>
 
                 <div class="form-group form-group--inline">
-                    <label> Miasto {{ form.city }} </label>
+                    <label> Miasto <input type="text" name="city" id="city"/> </label>
                 </div>
 
                 <div class="form-group form-group--inline">
                   <label>
-                    Kod pocztowy {{ form.zip_code }}
+                    Kod pocztowy <input type="text" name="zip_code" id="zip_code" />
                   </label>
                 </div>
 
                 <div class="form-group form-group--inline">
                   <label>
-                    Numer telefonu {{ form.phone_number }}
+                    Numer telefonu <input type="phone" name="phone_number" id="phone_number" />
                   </label>
                 </div>
               </div>
@@ -189,17 +189,17 @@
               <div class="form-section--column">
                 <h4>Termin odbioru</h4>
                 <div class="form-group form-group--inline">
-                  <label> Data {{ form.pick_up_date }} </label>
+                  <label> Data <input type="date" name="date" id="pick_up_date" /> </label>
                 </div>
 
                 <div class="form-group form-group--inline">
-                  <label> Godzina {{ form.pick_up_time }} </label>
+                  <label> Godzina <input type="time" name="time" id="pick_up_time" /> </label>
                 </div>
 
                 <div class="form-group form-group--inline">
                   <label>
                     Uwagi dla kuriera
-                    {{ form.pick_up_comment }}
+                      <textarea name="more_info" rows="5" id="pick_up_comment"></textarea>
                   </label>
                 </div>
               </div>

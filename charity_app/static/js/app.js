@@ -234,7 +234,28 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
       this.$step.parentElement.hidden = this.currentStep >= 6;
 
-      // TODO: get data from inputs and show them in summary
+      /**
+       * Summary for the form inputs before submit
+       *
+       */
+    const btn = document.getElementById('donation-confirmation');
+    btn.addEventListener('click', e => {
+      document.getElementById("summary-quantity").textContent = document.getElementById('bags').value;
+      document.querySelectorAll(".form-section--column ul li")[0].textContent = document.getElementById('address').value;
+      document.querySelectorAll(".form-section--column ul li")[1].textContent = document.getElementById('city').value;
+      document.querySelectorAll(".form-section--column ul li")[2].textContent = document.getElementById('zip_code').value;
+      document.querySelectorAll(".form-section--column ul li")[3].textContent = document.getElementById('phone_number').value;
+      document.querySelectorAll(".form-section--column ul li")[4].textContent = document.getElementById('pick_up_date').value;
+      document.querySelectorAll(".form-section--column ul li")[5].textContent = document.getElementById('pick_up_time').value;
+      document.querySelectorAll(".form-section--column ul li")[6].textContent = document.getElementById('pick_up_comment').value;
+      const institutionInputs = document.getElementsByName('institution')
+      institutionInputs.forEach(function (i) {
+        if (i.checked) {
+          const institution = i.parentElement.children[2].firstElementChild.innerHTML;
+          document.getElementById("summary-institution").textContent = "Dla fundacji " + '"' + institution + '"';
+    }
+  })
+})
     }
 
     /**
@@ -243,7 +264,6 @@ document.addEventListener("DOMContentLoaded", function() {
      * TODO: validation, send data to server
      */
     submit(e) {
-      e.preventDefault();
       this.currentStep++;
       this.updateForm();
     }
@@ -255,7 +275,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-const categoriesInputs = document.querySelectorAll('#categories');
+const categoriesInputs = document.getElementsByName('categories');
 const institutions = document.querySelectorAll('#institution');
 const btnChosenCat = document.getElementById('chosen-categories');
 const divInstitutions = document.querySelectorAll('#institution-label');
@@ -283,21 +303,5 @@ console.log(category_checked)
   });
 })
 
-const btn = document.getElementById('donation-confirmation');
-btn.addEventListener('click', e => {
-  document.getElementById("summary-quantity").textContent = document.getElementById('id_quantity').value;
-  document.querySelectorAll(".form-section--column ul li")[0].textContent = document.getElementById('id_address').value;
-  document.querySelectorAll(".form-section--column ul li")[1].textContent = document.getElementById('id_city').value;
-  document.querySelectorAll(".form-section--column ul li")[2].textContent = document.getElementById('id_zip_code').value;
-  document.querySelectorAll(".form-section--column ul li")[3].textContent = document.getElementById('id_phone_number').value;
-  document.querySelectorAll(".form-section--column ul li")[4].textContent = document.getElementById('id_pick_up_date').value;
-  document.querySelectorAll(".form-section--column ul li")[5].textContent = document.getElementById('id_pick_up_time').value;
-  document.querySelectorAll(".form-section--column ul li")[6].textContent = document.getElementById('id_pick_up_comment').value;
-  const institutionInputs = document.getElementsByName('institution')
-  institutionInputs.forEach(function (i) {
-    if (i.checked) {
-      const institution = i.parentElement.children[2].firstElementChild.innerHTML;
-      document.getElementById("summary-institution").textContent = "Dla fundacji " + '"' + institution + '"';
-    }
-  })
-})
+// Form validation
+const

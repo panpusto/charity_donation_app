@@ -1,13 +1,14 @@
 import random
-
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 
-from charity_app.forms import AddDonationForm
 from charity_app.models import Donation, Institution, Category
 
 
@@ -16,8 +17,7 @@ class LandingPageView(View):
     def get(self, request):
         bags_quantity = Donation.objects.aggregate(Sum('quantity'))
         bags_counter = bags_quantity['quantity__sum']
-        institutions = Donation.objects.aggregate(Sum('institution'))
-        institution_counter = institutions['institution__sum']
+        institution_counter = Donation.objects.all().count()
 
         foundations = list(Institution.objects.filter(type=1))
         random_foundations = random.sample(foundations, 3)
@@ -45,25 +45,53 @@ class AddDonationView(LoginRequiredMixin, View):
     login_url = 'login'
     """This function display form to add donation"""
     def get(self, request):
-        form = AddDonationForm()
         categories = Category.objects.all()
         institutions = Institution.objects.all()
         return render(
             request,
             'form.html',
             context={
-                'form': form,
                 'categories': categories,
                 'institutions': institutions,
             }
         )
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         """This function save donation data to database."""
-        form = AddDonationForm(request.POST)
+        institution = request.POST['institution']
+        categories = request.POST.getlist('categories')
+        quantity = request.POST['bags']
+        address = request.POST['address']
+        phone_number = request.POST['phone_number']
+        city = request.POST['city']
+        zip_code = request.POST['zip_code']
+        pick_up_date = request.POST['date']
+        pick_up_time = request.POST['time']
+        pick_up_comment = request.POST['more_info']
+        user = request.user
+        organization = Institution.objects.get(pk=institution)
 
-        if form.is_valid():
-            data = form.cleaned_data
+        donation = Donation.objects.create(
+            institution=organization,
+            quantity=quantity,
+            address=address,
+            phone_number=phone_number,
+            city=city,
+            zip_code=zip_code,
+            pick_up_date=pick_up_date,
+            pick_up_time=pick_up_time,
+            pick_up_comment=pick_up_comment,
+            user=user
+        )
+        donation.categories.set(categories)
+        donation.save()
+
+        return render(request, 'form-confirmation.html')
+
+
+class DonationConfirmationView(View):
+    def get(self, request):
+        return render(request, 'form-confirmation.html')
 
 
 class UserRegisterView(View):
