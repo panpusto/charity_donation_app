@@ -17,7 +17,7 @@
       <li class="logged-user">
         Witaj {{ user.username }}
         <ul class="dropdown">
-            <li><a href="#">Profil</a></li>
+            <li><a href="/user-profile/">Profil</a></li>
             <li><a href="#">Ustawienia</a></li>
             {% if user.is_authenticated and user.is_superuser %}
             <li><a href="/admin/">Panel administracyjny</a></li>

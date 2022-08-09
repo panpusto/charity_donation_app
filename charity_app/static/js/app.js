@@ -288,7 +288,6 @@ btnChosenCat.addEventListener("click", e => {
     if (category.checked) {
       category_checked.push(category.value);
     }
-console.log(category_checked)
   });
   institutions.forEach(function(i) {
     const institutionCategories = i.querySelectorAll('#cat');
@@ -296,7 +295,6 @@ console.log(category_checked)
     institutionCategories.forEach(function (j) {
       instCatArr.push(j.value)
     })
-    console.log(instCatArr)
     if (category_checked.every(elem => instCatArr.includes(elem)) === false) {
       i.style.display = 'none';
     }
@@ -328,3 +326,5 @@ console.log(category_checked)
 //   errorMessages.innerText = messages.join(', ');
 //   e.preventDefault();
 // })
+
+

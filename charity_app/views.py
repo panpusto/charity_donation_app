@@ -219,3 +219,15 @@ class LogoutView(View):
             logout(request)
 
         return redirect('/')
+
+
+class UserProfileView(View):
+    def get(self, request):
+        user_donations = Donation.objects.filter(user_id=request.user.id)
+        return render(
+            request,
+            'user_profile.html',
+            context={
+                'user_donations': user_donations,
+            }
+        )

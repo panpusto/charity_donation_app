@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Potwierdzenie{% endblock title %}
+
+{% block header%}
+<header class="header--form-page">
+    <nav class="container container--70">
+        {{ block.super }}
+    </nav>
+    <section class="login-page">
+        <div class="about-us--text">
+          <h2>Profil użytkownika {{ user.username.upper }}</h2>
+          <p><strong>Imię: </strong>{{ user.first_name.title | default:'Brak danych!' }}</p>
+          <p><strong>Nazwisko: </strong>{{ user.last_name.title | default:'Brak danych!' }}</p>
+          <p><strong>Email: </strong>{{ user.email }}</p>
+        </div>
+    </section>
+</header>
+{% endblock header %}
+
+{% block content %}
+<div>
+    <div>
+        <h2>Przekazane dary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Ilość worków</th>
+                    <th>Kategoria</th>
+                    <th>Data odbioru</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            {% for donation in user_donations %}
+            <tr>
+                <td>{{ donation.institution }}</td>
+                <td>{{ donation.quantity }}</td>
+                <td>
+                {% for category in donation.categories.all %}
+                    {% if forloop.last %}
+                    {{ category }}
+                    {% else %}
+                    {{ category }},
+                    {% endif %}
+                {% endfor %}
+                </td>
+                <td>{{ donation.pick_up_date }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
