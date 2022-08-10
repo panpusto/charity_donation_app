@@ -196,8 +196,72 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$next.forEach(btn => {
         btn.addEventListener("click", e => {
           e.preventDefault();
-          this.currentStep++;
-          this.updateForm();
+
+          if (this.currentStep === 1) {
+            if (categoriesValidation() === false) {
+              this.currentStep++;
+              this.updateForm();
+            } else {
+                alert("Musisz wybrać kategorię.")
+            }
+          }
+          else if (parseInt(this.currentStep) === 2) {
+            let bags_quantity = document.getElementById('bags');
+            if (parseInt(bags_quantity.value) > 0) {
+              this.currentStep++;
+              this.updateForm();
+            } else {
+                alert("Musisz zadeklarować co najmniej jeden worek!")
+            }
+          }
+          else if (parseInt(this.currentStep) === 3) {
+            if (institutionValidation() === false) {
+              this.currentStep++;
+              this.updateForm();
+            } else {
+              alert("Musisz wybrać instytucję, której chcesz przekazać dary.")
+            }
+          }
+          else if (parseInt(this.currentStep) === 4) {
+            let address = document.forms["donation-form"]["address"].value;
+            let city = document.forms["donation-form"]["city"].value;
+            let zip_code = document.forms["donation-form"]["zip_code"].value;
+            let phone_number = document.forms["donation-form"]["phone_number"].value;
+            let pick_up_date = document.forms["donation-form"]['pick_up_date'].value;
+            let pickup_formatted = new Date(pick_up_date.replace(/-/g, '/'));
+            let today_date = new Date(Date.now());
+            let pick_up_time = document.forms["donation-form"]["pick_up_time"].value;
+            console.log(pick_up_time < '10:00')
+            if ((address !== '') &&
+                (city !== '') &&
+                (zip_code !== '') &&
+                (phone_number !== '') &&
+                (pick_up_date !== '') &&
+                (pick_up_time !== '')) {
+              this.currentStep++;
+              this.updateForm();
+            } else if (address === '') {
+                alert("Uzupełnij pole 'Ulica'.")
+            } else if ((city === '') || (isNaN(city) === false)) {
+                alert("Uzupełnij pole 'Miasto'. Nie używaj cyfr.")
+            } else if ((zip_code === '') || (zip_code.length !== 5) || (isNaN((zip_code)) === true))  {
+                alert("Wpisz kod pocztowy w formacie XXXXX, np. 50304")
+            } else if ((phone_number === '') || (isNaN(phone_number) === true)) {
+                alert("Wpisz numer telefonu w formacie XXXXXXXXX, np. 123456789")
+            } else if (pick_up_date === '') {
+                alert("Wybierz preferowaną datę odbioru.")
+            } else if (pickup_formatted.getTime() < today_date.getTime()) {
+                alert("Wybierz datę jutrzejszą lub późniejszą.")
+            } else if ((pick_up_time === ''))  {
+                alert("Wybierz preferowaną godzinę odbioru.")
+            } else if ((pick_up_time > '20:00') || (pick_up_time < '10:00'))  {
+                alert("Wybierz godzinę pomiędzy 10:00 a 20:00.")
+            }
+          }
+          else {
+            this.currentStep++;
+            this.updateForm();
+          }
         });
       });
 
@@ -226,7 +290,7 @@ document.addEventListener("DOMContentLoaded", function() {
       this.slides.forEach(slide => {
         slide.classList.remove("active");
 
-        if (slide.dataset.step == this.currentStep) {
+        if (parseInt(slide.dataset.step) === this.currentStep) {
           slide.classList.add("active");
         }
       });
@@ -301,30 +365,27 @@ btnChosenCat.addEventListener("click", e => {
   });
 })
 
-// // Form validation
-// const quantity = document.getElementById('bags');
-// const category = document.getElementById('category');
-// const organization = document.getElementById('institution');
-// const address = document.getElementById('address');
-// const phoneNumber = document.getElementById('phone_number');
-// const city = document.getElementById('city');
-// const zipCode = document.getElementById('zip_code');
-// const pickUpDate = document.getElementById('pick_up_date');
-// const pickUpTime = document.getElementById('pick_up_time');
-// const pickUpComment = document.getElementById('pick_up_comment');
-// const donationForm = document.getElementById('donation-form');
-// const errorMessages = document.getElementById('error');
-//
-// donationForm.addEventListener('submit', (e) => {
-//   let messages = [];
-//   if (category.value == null) {
-//     messages.push("Musisz wybrać co najmniej jedną kategorię.")
-//   }
-//   if (quantity.value === '' || quantity.value == null) {
-//     messages.push("Musisz wpisać ile worków chcesz przekazać.")
-//   }
-//   errorMessages.innerText = messages.join(', ');
-//   e.preventDefault();
-// })
 
+// form validation step_1
+function categoriesValidation() {
+  let noCategoriesChecked = true;
+  let categories = document.querySelectorAll('#category');
+  for (let category of categories) {
+    if (category.checked) {
+      noCategoriesChecked = false;
+    }
+  }
+  return noCategoriesChecked
+}
 
+// form validation step_3
+function institutionValidation() {
+  let noInstitutionChecked = true;
+  let institutions = document.querySelectorAll('#institution-label');
+  for (let institution of institutions) {
+    if (institution.checked) {
+      noInstitutionChecked = false;
+    }
+  }
+  return noInstitutionChecked
+}
