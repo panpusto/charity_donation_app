@@ -81,25 +81,26 @@
       <h2>Komu pomagamy?</h2>
 
       <ul class="help--buttons">
-        <li data-id="1"><a href="#" class="btn btn--without-border active">Fundacjom</a></li>
-        <li data-id="2"><a href="#" class="btn btn--without-border">Organizacjom pozarządowym</a></li>
-        <li data-id="3"><a href="#" class="btn btn--without-border">Lokalnym zbiórkom</a></li>
+        <li data-id="1"><a href="#foundations-list" class="btn btn--without-border active">Fundacjom</a></li>
+        <li data-id="2"><a href="#organizations-list" class="btn btn--without-border">Organizacjom pozarządowym</a></li>
+        <li data-id="3"><a href="#fundraisers-list" class="btn btn--without-border">Lokalnym zbiórkom</a></li>
       </ul>
 
       <!-- SLIDE 1 -->
-      <div class="help--slides active" data-id="1" id="fundations-list">
+      <div class="help--slides active" data-id="1" id="foundations-list">
         <p>W naszej bazie znajdziesz listę zweryfikowanych Fundacji, z którymi współpracujemy.
             Możesz sprawdzić czym się zajmują, komu pomagają i czego potrzebują.</p>
 
         <ul class="help--slides-items">
+        {% for foundation in foundations_page_obj %}
           <li>
             <div class="col">
-              <div class="title">{{ random_foundations.0.name }}</div>
-              <div class="subtitle">{{ random_foundations.0.description }}</div>
+              <div class="title">{{ foundation.name }}</div>
+              <div class="subtitle">{{ foundation.description }}</div>
             </div>
 
             <div class="col"><div class="text">
-                {% for category in random_foundations.0.categories.all %}
+                {% for category in foundation.categories.all %}
                     {% if not forloop.last %}
                         {{ category }},
                     {% else %}
@@ -108,47 +109,29 @@
                 {% endfor %}</div>
             </div>
           </li>
-
-          <li>
-            <div class="col">
-              <div class="title">{{ random_foundations.1.name }}</div>
-              <div class="subtitle">Cel i misja: {{ random_foundations.1.description }}</div>
-            </div>
-
-            <div class="col"><div class="text">
-                {% for category in random_foundations.1.categories.all %}
-                    {% if not forloop.last %}
-                        {{ category }},
-                    {% else %}
-                        {{ category }}
-                    {% endif %}
-                {% endfor %}</div>
-            </div>
-
-          <li>
-            <div class="col">
-              <div class="title">{{ random_foundations.2.name }}</div>
-              <div class="subtitle">{{ random_foundations.1.description }}</div>
-            </div>
-
-            <div class="col"><div class="text">
-                {% for category in random_foundations.2.categories.all %}
-                    {% if not forloop.last %}
-                        {{ category }},
-                    {% else %}
-                        {{ category }}
-                    {% endif %}
-                {% endfor %}</div>
-            </div>
-          </li>
+        {% endfor %}
         </ul>
-        <!-- Pagination
+        {% if foundations_page_obj.has_other_pages %}
         <ul class="help--slides-pagination">
-          <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
-          <li><a href="#" class="btn btn--small btn--without-border" data-page="3">3</a></li>
+            {% if foundations_page_obj.has_previous %}
+                <li><a href="?page={{ foundations_page_obj.previous_page_number }}#foundations-list"
+                       class="btn btn--small btn--without-border">Poprzednia</a></li>
+            {% endif %}
+            {% for i in foundations_page_obj.paginator.page_range %}
+                {% if foundations_page_obj.number == i %}
+                <li><a href=""
+                       class="btn btn--small btn--without-border active">{{ i }}</a></li>
+                {% else %}
+                <li><a href="?page={{ i }}#foundations-list"
+                       class="btn btn--small btn--without-border">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if foundations_page_obj.has_next %}
+                <li><a href="?page={{ foundations_page_obj.next_page_number }}#foundations-list"
+                       class="btn btn--small btn--without-border">Następna</a></li>
+            {% endif %}
         </ul>
-        -->
+        {% endif %}
       </div>
 
 
@@ -159,14 +142,15 @@
           quos suscipit corporis!
         </p>
         <ul class="help--slides-items">
+          {% for org in non_gov_org_page_obj %}
           <li>
             <div class="col">
-              <div class="title">{{ random_non_gov_org.0.name }}</div>
-              <div class="subtitle">{{ random_non_gov_org.0.description }}</div>
+              <div class="title">{{ org.name }}</div>
+              <div class="subtitle">{{ org.description }}</div>
             </div>
 
             <div class="col"><div class="text">
-                {% for category in random_non_gov_org.0.categories.all %}
+                {% for category in org.categories.all %}
                     {% if not forloop.last %}
                         {{ category }},
                     {% else %}
@@ -175,58 +159,29 @@
                 {% endfor %}</div>
             </div>
           </li>
-
-          <li>
-            <div class="col">
-              <div class="title">{{ random_non_gov_org.1.name }}</div>
-              <div class="subtitle">{{ random_non_gov_org.1.description }}</div>
-            </div>
-
-            <div class="col"><div class="text">
-                {% for category in random_non_gov_org.1.categories.all %}
-                    {% if not forloop.last %}
-                        {{ category }},
-                    {% else %}
-                        {{ category }}
-                    {% endif %}
-                {% endfor %}</div>
-            </div>
-          </li>
-
-          <li>
-            <div class="col">
-              <div class="title">{{ random_non_gov_org.2.name }}</div>
-              <div class="subtitle">{{ random_non_gov_org.2.description }}</div>
-            </div>
-
-            <div class="col"><div class="text">
-                {% for category in random_non_gov_org.2.categories.all %}
-                    {% if not forloop.last %}
-                        {{ category }},
-                    {% else %}
-                        {{ category }}
-                    {% endif %}
-                {% endfor %}</div>
-            </div>
-          </li>
-
-          <li>
-            <div class="col">
-              <div class="title">{{ random_non_gov_org.3.name }}</div>
-              <div class="subtitle">{{ random_non_gov_org.3.description }}</div>
-            </div>
-
-            <div class="col"><div class="text">
-                {% for category in random_non_gov_org.3.categories.all %}
-                    {% if not forloop.last %}
-                        {{ category }},
-                    {% else %}
-                        {{ category }}
-                    {% endif %}
-                {% endfor %}</div>
-            </div>
-          </li>
+        {% endfor %}
         </ul>
+        {% if non_gov_org_page_obj.has_other_pages %}
+        <ul class="help--slides-pagination">
+            {% if non_gov_org_page_obj.has_previous %}
+                <li><a href="?page={{ non_gov_org_page_obj.previous_page_number }}"
+                       class="btn btn--small btn--without-border">Poprzednia</a></li>
+            {% endif %}
+            {% for i in non_gov_org_page_obj.paginator.page_range %}
+                {% if non_gov_org_page_obj.number == i %}
+                <li><a href=""
+                       class="btn btn--small btn--without-border active">{{ i }}</a></li>
+                {% else %}
+                <li><a href="?page={{ i }}"
+                       class="btn btn--small btn--without-border">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if non_gov_org_page_obj.has_next %}
+                <li><a href="?page={{ non_gov_org_page_obj.next_page_number }}"
+                       class="btn btn--small btn--without-border">Następna</a></li>
+            {% endif %}
+        </ul>
+        {% endif %}
 
         <!-- Pagination
         <ul class="help--slides-pagination">
@@ -240,18 +195,19 @@
       </div>
 
       <!-- SLIDE 3 -->
-      <div class="help--slides" data-id="3" id="fundrarisers-list">
+      <div class="help--slides" data-id="3" id="fundraisers-list">
         <p>Lorem ipsum dolor sit amet, his ocurreret persequeris ea, ad utinam laudem duo.
             Verterem adipisci partiendo eos ne, ea his reque quaeque recteque, ne quo lobortis intellegam.</p>
         <ul class="help--slides-items">
+          {% for fundraiser in fundraisers_page_obj %}
           <li>
             <div class="col">
-              <div class="title">{{ random_fundraisers.0.name }}</div>
-              <div class="subtitle">{{ random_fundraisers.0.description }}</div>
+              <div class="title">{{ fundraiser.name }}</div>
+              <div class="subtitle">{{ fundraiser.description }}</div>
             </div>
 
             <div class="col"><div class="text">
-                {% for category in random_fundraisers.0.categories.all %}
+                {% for category in fundraiser.categories.all %}
                     {% if not forloop.last %}
                         {{ category }},
                     {% else %}
@@ -260,24 +216,29 @@
                 {% endfor %}</div>
             </div>
           </li>
-
-          <li>
-            <div class="col">
-              <div class="title">{{ random_fundraisers.1.name }}</div>
-              <div class="subtitle">{{ random_fundraisers.1.description }}</div>
-            </div>
-
-            <div class="col"><div class="text">
-                {% for category in random_fundraisers.1.categories.all %}
-                    {% if not forloop.last %}
-                        {{ category }},
-                    {% else %}
-                        {{ category }}
-                    {% endif %}
-                {% endfor %}</div>
-            </div>
-          </li>
+        {% endfor %}
         </ul>
+        {% if fundraisers_page_obj.has_other_pages %}
+        <ul class="help--slides-pagination">
+            {% if fundraisers_page_obj.has_previous %}
+                <li><a href="?page={{ fundraisers_page_obj.previous_page_number }}"
+                       class="btn btn--small btn--without-border">Poprzednia</a></li>
+            {% endif %}
+            {% for i in fundraisers_page_obj.paginator.page_range %}
+                {% if fundraisers_page_obj.number == i %}
+                <li><a href=""
+                       class="btn btn--small btn--without-border active">{{ i }}</a></li>
+                {% else %}
+                <li><a href="?page={{ i }}"
+                       class="btn btn--small btn--without-border">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if fundraisers_page_obj.has_next %}
+                <li><a href="?page={{ fundraisers_page_obj.next_page_number }}"
+                       class="btn btn--small btn--without-border">Następna</a></li>
+            {% endif %}
+        </ul>
+        {% endif %}
 
         <!-- Pagination
         <ul class="help--slides-pagination">

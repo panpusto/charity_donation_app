@@ -3,6 +3,7 @@ import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -19,14 +20,20 @@ class LandingPageView(View):
         bags_counter = bags_quantity['quantity__sum']
         institution_counter = Donation.objects.all().count()
 
-        foundations = list(Institution.objects.filter(type=1))
-        random_foundations = random.sample(foundations, 3)
+        foundations = Institution.objects.filter(type=1).order_by('name')
+        paginator_1 = Paginator(foundations, 3)
+        foundations_page_number = request.GET.get('page')
+        foundations_page_obj = paginator_1.get_page(foundations_page_number)
 
-        non_gov_organisations = list(Institution.objects.filter(type=2))
-        random_non_gov_org = random.sample(non_gov_organisations, 4)
+        non_gov_org = Institution.objects.filter(type=2)
+        paginator_2 = Paginator(non_gov_org, 3)
+        non_gov_org_page_number = request.GET.get('page')
+        non_gov_org_page_obj = paginator_2.get_page(non_gov_org_page_number)
 
-        fundraisers = list(Institution.objects.filter(type=3))
-        random_fundraisers = random.sample(fundraisers, 2)
+        fundraisers = Institution.objects.filter(type=3)
+        paginator_3 = Paginator(fundraisers, 2)
+        fundraisers_page_number = request.GET.get('page')
+        fundraisers_page_obj = paginator_3.get_page(fundraisers_page_number)
 
         return render(
             request,
@@ -34,9 +41,9 @@ class LandingPageView(View):
             context={
                 'bags_counter': bags_counter,
                 'institution_counter': institution_counter,
-                'random_foundations': random_foundations,
-                'random_non_gov_org': random_non_gov_org,
-                'random_fundraisers': random_fundraisers,
+                'foundations_page_obj': foundations_page_obj,
+                'non_gov_org_page_obj': non_gov_org_page_obj,
+                'fundraisers_page_obj': fundraisers_page_obj,
             }
         )
 
@@ -223,6 +230,7 @@ class LogoutView(View):
 
 class UserProfileView(View):
     def get(self, request):
+        """This function display info about user and list of his donations."""
         user_donations = Donation.objects.filter(user_id=request.user.id).order_by('-pick_up_date')
         return render(
             request,
