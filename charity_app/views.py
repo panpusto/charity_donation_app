@@ -308,9 +308,9 @@ class ChangeUserPasswordView(LoginRequiredMixin, View):
 
         if old_password:
             if len(new_password) < 8 or (not any(char.isdigit() for char in new_password) or
-                                     not any(char.isupper() for char in new_password) or
-                                     not any(char.islower() for char in new_password) or
-                                     not any(char in special_symbols for char in new_password)):
+                                         not any(char.isupper() for char in new_password) or
+                                         not any(char.islower() for char in new_password) or
+                                         not any(char in special_symbols for char in new_password)):
                 message = "Hasło powinno składać się przynajmniej z 8 znaków," \
                           "jednej wielkiej litery, jednej małej litery oraz jednego ze znaków !, @, #, %"
 
@@ -342,3 +342,5 @@ class ChangeUserPasswordView(LoginRequiredMixin, View):
                 'message': "Wpisane aktualne hasło jest niepoprawne!"
             }
         )
+
+
