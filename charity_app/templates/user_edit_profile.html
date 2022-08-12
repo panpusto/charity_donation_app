@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Rejestracja{% endblock title %}
+
+{% block header %}
+<header>
+    <nav class="container container--70">
+        {{ block.super }}
+    </nav>
+</header>
+{% endblock header %}
+
+{% block content %}
+
+    <section class="login-page">
+      <h2>Edytuj dane</h2>
+        {% if message %}
+            <div class="validation">
+                <span>{{ message }}</span>
+            </div>
+        {% endif %}
+      <form method="post" style="text-align: left">
+          {% csrf_token %}
+        <div class="form-group">
+            <p><label for="name" style="font-size: large">Imię: </label></p>
+            <input type="text" name="name" value="{{ user.first_name }}">
+        </div>
+         <div class="form-group">
+            <p><label for="surname" style="font-size: large">Nazwisko: </label></p>
+            <input type="text" name="surname" value="{{ user.last_name }}">
+        </div>
+        <div class="form-group">
+            <p><label for="email" style="font-size: large">Email: </label></p>
+            <input type="email" name="email" value="{{ user.email }}">
+        </div>
+        <div class="form-group">
+            <p><label for="password" style="font-size: large">Wprowadź hasło, aby zapisać zmiany: </label></p>
+            <input type="password" name="password">
+        </div>
+
+        <div class="form-group form-group--buttons">
+          <button class="btn" type="submit">Zapisz zmiany</button>
+        </div>
+      </form>
+    </section>
+
+{% endblock content %}

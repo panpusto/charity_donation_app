@@ -252,4 +252,93 @@ class ArchiveDonationView(View):
             picked_up_donation.taken_time = timezone.now()
             picked_up_donation.save()
 
+        if "cancel_picked_up_confirmation" in request.POST:
+            picked_up_donation.is_taken = False
+            picked_up_donation.taken_time = None
+            picked_up_donation.save()
+
         return redirect('user-profile')
+
+
+class EditUserProfileView(LoginRequiredMixin, View):
+    login_url = 'login'
+    def get(self, request):
+        return render(
+            request,
+            'user_edit_profile.html'
+        )
+
+    def post(self, request):
+        user = User.objects.get(pk=request.user.id)
+        first_name = request.POST['name']
+        last_name = request.POST['surname']
+        email = request.POST['email']
+        valid_password = request.user.check_password(request.POST['password'])
+
+        if valid_password:
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.save()
+
+            return redirect('user-profile')
+
+        return render(
+            request,
+            'user_edit_profile.html',
+            context={
+                'message': "Wprowadzone hasło jest niepoprawne!"
+            })
+
+
+class ChangeUserPasswordView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(
+            request,
+            'user_change_password.html'
+        )
+
+    def post(self, request):
+        user = User.objects.get(pk=request.user.id)
+        old_password = request.user.check_password(request.POST['old_password'])
+        new_password = request.POST['new_password']
+        new_password_2 = request.POST['repeated_new_password']
+
+        special_symbols = ['!', '@', '#', '%']
+
+        if old_password:
+            if len(new_password) < 8 or (not any(char.isdigit() for char in new_password) or
+                                     not any(char.isupper() for char in new_password) or
+                                     not any(char.islower() for char in new_password) or
+                                     not any(char in special_symbols for char in new_password)):
+                message = "Hasło powinno składać się przynajmniej z 8 znaków," \
+                          "jednej wielkiej litery, jednej małej litery oraz jednego ze znaków !, @, #, %"
+
+                return render(
+                    request,
+                    'user_change_password.html',
+                    context={
+                        'message': message
+                    }
+                )
+
+            if new_password != new_password_2:
+                message = "Hasła nie są identyczne. Proszę wpisz je jeszcze raz."
+                return render(request,
+                              'user_change_password.html',
+                              context={
+                                  'message': message,
+                              })
+
+            user.set_password(new_password)
+            user.save()
+
+            return redirect('login')
+
+        return render(
+            request,
+            'user_change_password.html',
+            context={
+                'message': "Wpisane aktualne hasło jest niepoprawne!"
+            }
+        )

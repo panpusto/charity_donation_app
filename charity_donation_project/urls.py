@@ -27,4 +27,6 @@ urlpatterns = [
     path('user-profile/', views.UserProfileView.as_view(), name='user-profile'),
     path('donation-confirmation/', views.DonationConfirmationView.as_view(), name='donation-confirmation'),
     path('add-to-archive/<int:pk>/', views.ArchiveDonationView.as_view(), name='add-to-archive'),
+    path('edit-user/', views.EditUserProfileView.as_view(), name='edit-user'),
+    path('change-password/', views.ChangeUserPasswordView.as_view(), name='change-password'),
 ]
