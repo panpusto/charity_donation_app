@@ -1,13 +1,10 @@
-import random
-import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Sum
-from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.utils import timezone
 from django.views import View
 
 from charity_app.models import Donation, Institution, Category
@@ -21,17 +18,17 @@ class LandingPageView(View):
         institution_counter = Donation.objects.all().count()
 
         foundations = Institution.objects.filter(type=1).order_by('name')
-        paginator_1 = Paginator(foundations, 3)
+        paginator_1 = Paginator(foundations, 5)
         foundations_page_number = request.GET.get('page')
         foundations_page_obj = paginator_1.get_page(foundations_page_number)
 
-        non_gov_org = Institution.objects.filter(type=2)
-        paginator_2 = Paginator(non_gov_org, 3)
+        non_gov_org = Institution.objects.filter(type=2).order_by('name')
+        paginator_2 = Paginator(non_gov_org, 5)
         non_gov_org_page_number = request.GET.get('page')
         non_gov_org_page_obj = paginator_2.get_page(non_gov_org_page_number)
 
-        fundraisers = Institution.objects.filter(type=3)
-        paginator_3 = Paginator(fundraisers, 2)
+        fundraisers = Institution.objects.filter(type=3).order_by('name')
+        paginator_3 = Paginator(fundraisers, 5)
         fundraisers_page_number = request.GET.get('page')
         fundraisers_page_obj = paginator_3.get_page(fundraisers_page_number)
 
@@ -231,7 +228,9 @@ class LogoutView(View):
 class UserProfileView(View):
     def get(self, request):
         """This function display info about user and list of his donations."""
-        user_donations = Donation.objects.filter(user_id=request.user.id).order_by('-pick_up_date')
+        user_donations = Donation.objects.filter(user_id=request.user.id).order_by('-pick_up_date',
+                                                                                   'is_taken',
+                                                                                   '-taken_time')
         return render(
             request,
             'user_profile.html',
@@ -239,3 +238,18 @@ class UserProfileView(View):
                 'user_donations': user_donations,
             }
         )
+
+
+class ArchiveDonationView(View):
+    def post(self, request, pk):
+        """
+        This function allows to confirm that the package has been picked up
+        form the user.
+        """
+        picked_up_donation = request.user.donation_set.get(pk=pk)
+        if "picked_up_confirm" in request.POST:
+            picked_up_donation.is_taken = True
+            picked_up_donation.taken_time = timezone.now()
+            picked_up_donation.save()
+
+        return redirect('user-profile')

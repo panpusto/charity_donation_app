@@ -29,11 +29,14 @@
                     <th>Ilość worków</th>
                     <th>Kategoria</th>
                     <th>Data odbioru</th>
+                    <th>Status</th>
+                    <th>Aktualizacja</th>
                 </tr>
             </thead>
             <tbody></tbody>
             {% for donation in user_donations %}
-            <tr>
+                {% if donation.is_taken %}
+            <tr style="color: green">
                 <td>{{ donation.institution }}</td>
                 <td>{{ donation.quantity }}</td>
                 <td>
@@ -46,7 +49,33 @@
                 {% endfor %}
                 </td>
                 <td>{{ donation.pick_up_date }}</td>
+                <td>ODEBRANE</td>
+                <td>{{ donation.taken_time }}</td>
             </tr>
+                {% endif %}
+                {% if not donation.is_taken %}
+                    <tr>
+                <td>{{ donation.institution }}</td>
+                <td>{{ donation.quantity }}</td>
+                <td>
+                {% for category in donation.categories.all %}
+                    {% if forloop.last %}
+                    {{ category }}
+                    {% else %}
+                    {{ category }},
+                    {% endif %}
+                {% endfor %}
+                </td>
+                <td>{{ donation.pick_up_date }}</td>
+                <td>NIEODEBRANE</td>
+                <td>{{ donation.taken_time|default:"Oczekuje na potwierdzenie" }}</td>
+                <td><form action="/add-to-archive/{{ donation.pk }}/" method="POST">{% csrf_token %}
+                    <input type="submit"
+                           name="picked_up_confirm"
+                           value="Potwierdź odbiór">
+                </form></td>
+            </tr>
+                {% endif %}
             {% endfor %}
             </tbody>
         </table>
