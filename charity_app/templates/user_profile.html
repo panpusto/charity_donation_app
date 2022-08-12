@@ -14,14 +14,6 @@
           <p><strong>Nazwisko: </strong>{{ user.last_name.title | default:'Brak danych!' }}</p>
           <p><strong>Email: </strong>{{ user.email }}</p>
         </div>
-
-        <div class="form-group form-group--buttons">
-            <a href="{% url 'edit-user' %}" class="btn btn--without-border">Edytuj dane</a>
-        </div>
-
-        <div class="form-group form-group--buttons">
-            <a href="{% url 'change-password' %}" class="btn btn--without-border">Zmień hasło</a>
-        </div>
     </section>
 </header>
 {% endblock header %}
