@@ -248,6 +248,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 alert("Wpisz kod pocztowy w formacie XXXXX, np. 50304")
             } else if ((phone_number === '') || (isNaN(phone_number) === true)) {
                 alert("Wpisz numer telefonu w formacie XXXXXXXXX, np. 123456789")
+            } else if (phone_number.length > 12) {
+                alert("Wpisany numer telefonu jest za długi.")
             } else if (pick_up_date === '') {
                 alert("Wybierz preferowaną datę odbioru.")
             } else if (pickup_formatted.getTime() < today_date.getTime()) {

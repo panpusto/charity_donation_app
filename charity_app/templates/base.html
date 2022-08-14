@@ -52,20 +52,24 @@
       <div class="contact" id="contact">
         <h2>Skontaktuj się z nami</h2>
         <h3>Formularz kontaktowy</h3>
-        <form class="form--contact">
+        <form class="form--contact" method="POST" action="{% url 'contact-form' %}">
+            {% csrf_token %}
           <div class="form-group form-group--50">
-            <input type="text" name="name" placeholder="Imię" />
+{#            <input type="text" name="name" placeholder="Imię i nazwisko" />#}
+              {{ contact_form.name }}
           </div>
           <div class="form-group form-group--50">
-            <input type="text" name="surname" placeholder="Nazwisko" />
+{#            <input type="email" name="email" placeholder="Email" />#}
+              {{ contact_form.email }}
           </div>
 
           <div class="form-group">
-            <textarea
-              name="message"
-              placeholder="Wiadomość"
-              rows="1"
-            ></textarea>
+{#            <textarea#}
+{#              name="message"#}
+{#              placeholder="Wiadomość"#}
+{#              rows="1"#}
+{#            ></textarea>#}
+              {{ contact_form.message }}
           </div>
 
           <button class="btn" type="submit">Wyślij</button>

@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail
 from django.core.paginator import Paginator
 from django.db.models import Sum
 from django.http import HttpResponse
@@ -13,7 +13,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import View
 
-from charity_app.forms import UserCreateForm
+from charity_app.forms import UserCreateForm, ContactForm
 from charity_app.models import Donation, Institution, Category
 from charity_app.token import account_activation_token
 
@@ -50,6 +50,7 @@ class LandingPageView(View):
                 'foundations_page_obj': foundations_page_obj,
                 'non_gov_org_page_obj': non_gov_org_page_obj,
                 'fundraisers_page_obj': fundraisers_page_obj,
+                'contact_form': ContactForm()
             }
         )
 
@@ -67,6 +68,7 @@ class AddDonationView(LoginRequiredMixin, View):
             context={
                 'categories': categories,
                 'institutions': institutions,
+                'contact_form': ContactForm()
             }
         )
 
@@ -120,7 +122,8 @@ class UserRegisterView(View):
             request,
             'register.html',
             context={
-                'form': form
+                'form': form,
+                'contact_form': ContactForm()
             }
         )
 
@@ -216,7 +219,10 @@ class LoginView(View):
     def get(self, request):
         return render(
             request,
-            'login.html'
+            'login.html',
+            context={
+                'contact_form': ContactForm()
+            }
         )
 
     def post(self, request):
@@ -275,6 +281,7 @@ class UserProfileView(View):
             'user_profile.html',
             context={
                 'user_donations': user_donations,
+                'contact_form': ContactForm()
             }
         )
 
@@ -306,7 +313,10 @@ class EditUserProfileView(LoginRequiredMixin, View):
         """This function display form to editing user profile."""
         return render(
             request,
-            'user_edit_profile.html'
+            'user_edit_profile.html',
+            context={
+                'contact_form': ContactForm()
+            }
         )
 
     def post(self, request):
@@ -341,7 +351,10 @@ class ChangeUserPasswordView(LoginRequiredMixin, View):
         """This function display for to change user password."""
         return render(
             request,
-            'user_change_password.html'
+            'user_change_password.html',
+            context={
+                'contact_form': ContactForm()
+            }
         )
 
     def post(self, request):
@@ -392,3 +405,29 @@ class ChangeUserPasswordView(LoginRequiredMixin, View):
                 'message': "Wpisane aktualne hasło jest niepoprawne!"
             }
         )
+
+
+class ContactView(View):
+    def post(self, request):
+        contact_form = ContactForm(request.POST)
+
+        if contact_form.is_valid():
+            data = contact_form.cleaned_data
+
+            name = data["name"]
+            email = data["email"]
+            admins = User.objects.filter(is_staff=True, is_superuser=True)
+
+            send_mail(
+                subject=f"Oddam w dobre ręce - wiadomość od {name.title()} / {email}",
+                message=data["message"],
+                from_email=None,
+                recipient_list=[admin.email for admin in admins]
+            )
+
+            return render(
+                request,
+                "contact_message_confirmation.html"
+            )
+
+        return redirect('landing-page')

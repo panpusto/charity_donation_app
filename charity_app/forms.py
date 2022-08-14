@@ -39,3 +39,14 @@ class UserCreateForm(forms.ModelForm):
         except User.DoesNotExist:
             pass
 
+
+class ContactForm(forms.Form):
+    name = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Imię i nazwisko"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Email"}))
+    message = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                "placeholder": "Wiadomość"
+            }
+        )
+    )

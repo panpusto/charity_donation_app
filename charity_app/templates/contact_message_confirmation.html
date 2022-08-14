@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Potwierdzenie{% endblock title %}
+
+{% block header%}
+<header class="header--form-page">
+    <nav class="container container--70">
+        {{ block.super }}
+    </nav>
+    <div class="slogan container container--90">
+      <h2>
+          Dziękujemy za Twoją wiadomość. <br>
+          Odpowiemy na nią najszybciej jak to możliwe.
+      </h2>
+    </div>
+</header>
+{% endblock header %}
+
