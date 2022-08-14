@@ -29,4 +29,5 @@ urlpatterns = [
     path('add-to-archive/<int:pk>/', views.ArchiveDonationView.as_view(), name='add-to-archive'),
     path('edit-user/', views.EditUserProfileView.as_view(), name='edit-user'),
     path('change-password/', views.ChangeUserPasswordView.as_view(), name='change-password'),
+    path('activate/<uidb64>/<token>', views.ActivateAccountView.as_view(), name='activate'),
 ]
