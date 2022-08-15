@@ -1,6 +1,8 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage, send_mail
 from django.core.paginator import Paginator
@@ -409,6 +411,7 @@ class ChangeUserPasswordView(LoginRequiredMixin, View):
 
 class ContactView(View):
     def post(self, request):
+        """This function send user message to website admins."""
         contact_form = ContactForm(request.POST)
 
         if contact_form.is_valid():

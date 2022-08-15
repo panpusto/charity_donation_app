@@ -131,7 +131,7 @@ EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = 'charity donation'
 
 try:
-    from charity_donation_project.local_settings import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
+    from charity_donation_project.local_settings import EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_FILE_PATH
 except ModuleNotFoundError:
     print("No email configuration in local_settings.py!")
     print("Complete the details and try again!")

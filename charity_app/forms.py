@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
@@ -50,3 +51,30 @@ class ContactForm(forms.Form):
             }
         )
     )
+
+
+class ResetPasswordViaEmail(PasswordResetForm):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Email"}))
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if not User.objects.filter(email__iexact=email, is_active=True).exists():
+            raise ValidationError("Użytkownika z takim adresem email nie ma w bazie!")
+        return email
+
+
+class NewPasswordConfirmForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={"placeholder": "Hasło"}),
+        validators=[password_validate],
+        label='Nowe hasło'
+    )
+    new_password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={"placeholder": "Powtórz hasło"}),
+        label="Powtórz hasło")
+
+    def clean(self):
+        password1 = self.cleaned_data.get("new_password1")
+        password2 = self.cleaned_data.get("new_password2")
+        if password1 != password2:
+            raise ValidationError("Hasła w obu polach nie są zgodne.")
