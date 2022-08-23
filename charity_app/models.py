@@ -1,5 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import pre_delete
+from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 
 INSTITUTION_TYPE = {
     (1, 'fundacja'),
@@ -40,3 +44,10 @@ class Donation(models.Model):
 
     is_taken = models.BooleanField(default=False)
     taken_time = models.DateTimeField(null=True)
+
+
+@receiver(pre_delete, sender=User)
+def delete_user(sender, instance, **kwargs):
+    """This function prevent to deleting any superuser. Result is 403 Forbidden"""
+    if instance.is_superuser:
+        raise PermissionDenied

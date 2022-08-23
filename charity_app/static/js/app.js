@@ -227,11 +227,11 @@ document.addEventListener("DOMContentLoaded", function() {
             let city = document.forms["donation-form"]["city"].value;
             let zip_code = document.forms["donation-form"]["zip_code"].value;
             let phone_number = document.forms["donation-form"]["phone_number"].value;
-            let pick_up_date = document.forms["donation-form"]['pick_up_date'].value;
+            let pick_up_date = document.forms["donation-form"]["pick_up_date"].value;
             let pickup_formatted = new Date(pick_up_date.replace(/-/g, '/'));
             let today_date = new Date(Date.now());
             let pick_up_time = document.forms["donation-form"]["pick_up_time"].value;
-            console.log(pick_up_time < '10:00')
+            console.log(pick_up_time < "10:00")
             if ((address !== '') &&
                 (city !== '') &&
                 (zip_code !== '') &&
@@ -256,7 +256,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 alert("Wybierz datę jutrzejszą lub późniejszą.")
             } else if ((pick_up_time === ''))  {
                 alert("Wybierz preferowaną godzinę odbioru.")
-            } else if ((pick_up_time > '20:00') || (pick_up_time < '10:00'))  {
+            } else if ((pick_up_time > "20:00") || (pick_up_time < "10:00"))  {
                 alert("Wybierz godzinę pomiędzy 10:00 a 20:00.")
             }
           }
